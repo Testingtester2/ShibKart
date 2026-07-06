@@ -1,6 +1,6 @@
 # ShibKart — Placeholder Site
 
-A "coming soon" landing page for **ShibKart**, the Shibarium marketplace.
+A "coming soon" landing page for **ShibKart**, the on-chain kart racer on Shibarium.
 
 Styled in the usual Shib house look: dark theme, circular Shiba Inu badge
 (logo sourced from CoinGecko), two-tone `Shib`/`Kart` wordmark, SHIB-orange →
@@ -42,4 +42,4 @@ npx serve .
   (`assets.coingecko.com/coins/images/11939/...`) and used for both the header
   mark and the favicon.
 - The "Notify me" form is a front-end placeholder — wire it to a real endpoint
-  (Vercel Function, Formspree, etc.) when the marketplace is ready.
+  (Vercel Function, Formspree, etc.) when the game is ready to launch.
