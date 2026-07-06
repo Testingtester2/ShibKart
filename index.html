@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ShibKart — Coming Soon</title>
+  <meta name="description" content="ShibKart — the Shibarium marketplace. Shop, cart, and pay in BONE. Launching soon." />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="ShibKart — Coming Soon" />
+  <meta property="og:description" content="The Shibarium marketplace. Shop, cart, and pay in BONE. Launching soon." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://assets.coingecko.com/coins/images/11939/large/shiba.png" />
+  <meta name="theme-color" content="#0a0a0c" />
+
+  <!-- Favicon: SHIB logo from CoinGecko -->
+  <link rel="icon" type="image/png" href="https://assets.coingecko.com/coins/images/11939/large/shiba.png" />
+
+  <style>
+    :root {
+      --bg: #0a0a0c;
+      --bg-2: #111114;
+      --card: rgba(22, 22, 27, 0.72);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --text: #f5f5f7;
+      --muted: #9a9aa5;
+      --shib-orange: #ffa409;
+      --shib-red: #f24405;
+      --green: #22c55e;
+      --radius: 22px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { -webkit-text-size-adjust: 100%; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+        Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      position: relative;
+    }
+
+    /* Ambient glow backdrop, echoing the app's purple/orange stadium lighting */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(60% 55% at 15% 0%, rgba(255, 164, 9, 0.16), transparent 60%),
+        radial-gradient(55% 55% at 90% 10%, rgba(124, 58, 237, 0.20), transparent 60%),
+        radial-gradient(70% 60% at 50% 100%, rgba(242, 68, 5, 0.12), transparent 65%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ---------- Top bar ---------- */
+    header {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 22px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: #fff;
+      padding: 3px;
+      box-shadow: 0 0 0 2px rgba(255, 164, 9, 0.35),
+        0 8px 24px rgba(242, 68, 5, 0.25);
+      flex-shrink: 0;
+    }
+
+    .wordmark {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+    .wordmark .a { color: #fff; }
+    .wordmark .b { color: var(--shib-orange); }
+
+    .status-pill {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      backdrop-filter: blur(10px);
+    }
+    .dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 10px var(--green);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.55; transform: scale(0.8); }
+    }
+
+    /* ---------- Hero ---------- */
+    main {
+      position: relative;
+      z-index: 1;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 30px 22px 60px;
+    }
+
+    .hero {
+      position: relative;
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 46px 34px 40px;
+      overflow: hidden;
+      backdrop-filter: blur(14px);
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
+    }
+    .hero::after {
+      content: "";
+      position: absolute;
+      top: -1px; left: -1px; right: -1px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--shib-red), var(--shib-orange), transparent);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 164, 9, 0.45);
+      background: rgba(255, 164, 9, 0.08);
+      color: var(--shib-orange);
+      font-size: 12.5px;
+      font-weight: 800;
+      letter-spacing: 1.6px;
+      text-transform: uppercase;
+      margin-bottom: 26px;
+    }
+    .badge .cart { font-size: 15px; }
+
+    .hero h1 {
+      font-size: clamp(44px, 9vw, 88px);
+      font-weight: 900;
+      line-height: 0.98;
+      letter-spacing: -2px;
+    }
+    .hero h1 .kart {
+      background: linear-gradient(100deg, var(--shib-orange), var(--shib-red));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero p {
+      margin-top: 20px;
+      font-size: clamp(17px, 2.4vw, 21px);
+      line-height: 1.5;
+      color: var(--muted);
+      max-width: 560px;
+    }
+
+    /* ---------- Stat row (echoing the pots/entry cards) ---------- */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 36px;
+      max-width: 600px;
+    }
+    .stat {
+      padding: 4px 0;
+    }
+    .stat .label {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .stat .value {
+      margin-top: 6px;
+      font-size: clamp(22px, 4vw, 30px);
+      font-weight: 900;
+      letter-spacing: -0.5px;
+    }
+    .stat .value.accent { color: var(--shib-orange); }
+
+    /* ---------- Notify form ---------- */
+    .notify {
+      margin-top: 40px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      max-width: 520px;
+    }
+    .notify input {
+      flex: 1;
+      min-width: 220px;
+      padding: 15px 18px;
+      border-radius: 14px;
+      border: 1px solid var(--card-border);
+      background: rgba(0, 0, 0, 0.35);
+      color: var(--text);
+      font-size: 15px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .notify input:focus { border-color: var(--shib-orange); }
+    .notify input::placeholder { color: #6b6b76; }
+
+    .notify button {
+      padding: 15px 26px;
+      border-radius: 14px;
+      border: none;
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: 800;
+      color: #1a0d00;
+      background: linear-gradient(100deg, var(--shib-orange), var(--shib-red));
+      transition: transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 8px 24px rgba(242, 68, 5, 0.35);
+    }
+    .notify button:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(242, 68, 5, 0.45); }
+    .notify button:active { transform: translateY(0); }
+
+    .form-note {
+      margin-top: 14px;
+      font-size: 13px;
+      color: var(--muted);
+      min-height: 18px;
+    }
+    .form-note.ok { color: var(--green); }
+
+    /* ---------- Footer ---------- */
+    footer {
+      position: relative;
+      z-index: 1;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 26px 22px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 14px;
+      color: var(--muted);
+      font-size: 13.5px;
+    }
+    footer .links { display: flex; gap: 22px; }
+    footer a {
+      color: var(--muted);
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+    footer a:hover { color: var(--shib-orange); }
+
+    @media (max-width: 560px) {
+      .stats { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+      .hero { padding: 36px 22px 34px; }
+      header { padding: 16px 18px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <img class="logo" src="https://assets.coingecko.com/coins/images/11939/large/shiba.png" alt="Shiba Inu logo" />
+      <span class="wordmark"><span class="a">Shib</span><span class="b">Kart</span></span>
+    </div>
+    <div class="status-pill">
+      <span class="dot"></span>
+      <span>On Shibarium</span>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <span class="badge"><span class="cart">🛒</span> Marketplace · Coming Soon</span>
+      <h1>Shop the pack.<br />Pay in <span class="kart">BONE</span>.</h1>
+      <p>
+        ShibKart is the Shibarium marketplace — grab gear, mint drops, and check
+        out with your wallet. We're loading the shelves. Doors open soon.
+      </p>
+
+      <div class="stats">
+        <div class="stat">
+          <div class="label">Network</div>
+          <div class="value">Shibarium</div>
+        </div>
+        <div class="stat">
+          <div class="label">Checkout</div>
+          <div class="value accent">BONE</div>
+        </div>
+        <div class="stat">
+          <div class="label">Launch</div>
+          <div class="value">Soon™</div>
+        </div>
+      </div>
+
+      <form class="notify" id="notify" novalidate>
+        <input type="email" id="email" placeholder="you@wallet.shib" aria-label="Email address" />
+        <button type="submit">Notify me</button>
+      </form>
+      <div class="form-note" id="note">Be first in the cart when we launch.</div>
+    </section>
+  </main>
+
+  <footer>
+    <span>© 2026 ShibKart · Built on Shibarium</span>
+    <div class="links">
+      <a href="#">X</a>
+      <a href="#">Telegram</a>
+      <a href="#">Docs</a>
+    </div>
+  </footer>
+
+  <script>
+    // Placeholder notify handler — no backend yet, just a friendly confirmation.
+    var form = document.getElementById('notify');
+    var note = document.getElementById('note');
+    var email = document.getElementById('email');
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var v = (email.value || '').trim();
+      var valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+      if (!valid) {
+        note.textContent = 'Enter a valid email to get notified.';
+        note.className = 'form-note';
+        email.focus();
+        return;
+      }
+      note.textContent = "You're on the list. We'll woof when the doors open. 🐕";
+      note.className = 'form-note ok';
+      email.value = '';
+    });
+  </script>
+</body>
+</html>
