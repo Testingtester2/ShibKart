@@ -166,7 +166,7 @@ func _build_environment() -> void:
 	env.background_mode = Environment.BG_SKY
 	env.sky = sky
 	env.ambient_light_source = Environment.AMBIENT_SOURCE_SKY
-	env.ambient_light_energy = 0.7 if (wet == "rain" or wet == "fog") else 1.05
+	env.ambient_light_energy = 0.6 if (wet == "rain" or wet == "fog") else 0.82
 	# distance fog — denser in foggy/rainy/snowy weather
 	env.fog_enabled = true
 	env.fog_light_color = sky_hor
@@ -175,17 +175,17 @@ func _build_environment() -> void:
 	env.fog_density = {"fog": 0.028, "rain": 0.014, "snow": 0.012}.get(wet, 0.0022)
 	# bloom / tonemap for the polished arcade look (Forward+ only)
 	env.glow_enabled = true
-	env.glow_intensity = 0.5
-	env.glow_bloom = 0.15
-	env.glow_hdr_threshold = 0.95
+	env.glow_intensity = 0.28
+	env.glow_bloom = 0.04
+	env.glow_hdr_threshold = 1.2
 	env.glow_blend_mode = Environment.GLOW_BLEND_MODE_SCREEN
 	env.tonemap_mode = Environment.TONE_MAPPER_ACES
-	env.tonemap_white = 1.1
+	env.tonemap_white = 1.0
 	# punchier, cuter colour grade so nothing looks washed out
 	env.adjustment_enabled = true
 	env.adjustment_saturation = 1.3
 	env.adjustment_contrast = 1.1
-	env.adjustment_brightness = 1.03
+	env.adjustment_brightness = 0.95
 	# soft ambient-occlusion contact shadows for the modern stylized look (Forward+)
 	env.ssao_enabled = true
 	env.ssao_radius = 2.0
@@ -197,7 +197,7 @@ func _build_environment() -> void:
 
 	var sun := DirectionalLight3D.new()
 	sun.rotation_degrees = Vector3(-52, -40, 0)
-	sun.light_energy = 1.0 if (wet == "rain" or wet == "fog") else 1.7
+	sun.light_energy = 0.85 if (wet == "rain" or wet == "fog") else 1.28
 	sun.light_color = ground_col.lightened(0.6) if track.theme == "volcano" else Color(1.0, 0.96, 0.88)
 	sun.shadow_enabled = true
 	add_child(sun)
@@ -936,7 +936,7 @@ func _update_fx(dt: float) -> void:
 	if camera:
 		camera.fov = lerp(camera.fov, CAM_FOV_BOOST if boosting else CAM_FOV_BASE, clampf(dt * 6.0, 0.0, 1.0))
 	if _env:
-		_env.glow_intensity = lerp(_env.glow_intensity, 1.0 if boosting else 0.55, clampf(dt * 4.0, 0.0, 1.0))
+		_env.glow_intensity = lerp(_env.glow_intensity, 0.55 if boosting else 0.28, clampf(dt * 4.0, 0.0, 1.0))
 
 func _progress_score(k: Kart3D) -> float:
 	var done := k.lap * k._num_cp + k._cps_passed
