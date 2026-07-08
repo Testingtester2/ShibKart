@@ -119,6 +119,7 @@ func _ready() -> void:
 		tid = gs.selected_track_path.get_file().replace(".track.json", "")
 	AudioManager.play_music(tid, track.theme)
 	AudioManager.engine_start()
+	add_child(preload("res://scripts/touch_controls.gd").new())
 
 func _exit_tree() -> void:
 	# leaving the race: silence the looping engine/off-road SFX
@@ -1171,7 +1172,7 @@ func _update_items(dt: float) -> void:
 				b["cd"] = 5.0
 				break
 	# player uses item on E (edge-triggered)
-	var e := Input.is_key_pressed(KEY_E)
+	var e := Input.is_action_pressed("use_item")
 	if e and not _item_key_down and player.held_item != "" and not player.finished:
 		_use_item(player)
 	_item_key_down = e
