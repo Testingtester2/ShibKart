@@ -1,0 +1,10 @@
+# Godot 4 import + editor cache (regenerated on open)
+.godot/
+# Godot export output
+/build/
+/export/
+export_presets.cfg
+# OS junk
+.DS_Store
+Thumbs.db
+*.tmp
