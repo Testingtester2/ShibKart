@@ -104,7 +104,6 @@ func _ready() -> void:
 	_build_banners()
 	_build_roadside_boards()
 	_build_corner_signs()
-	_build_backdrop()
 	_build_clouds()
 	_build_props()
 	_build_item_boxes()
@@ -1438,7 +1437,9 @@ func _build_corner_signs() -> void:
 		i += maxi(3, n / 12)
 
 func _build_backdrop() -> void:
-	# a ring of distant scenery billboards so the horizon isn't empty
+	# DISABLED: the generated hills/mesa art is near-opaque (fills the frame) and made a
+	# green wall you could drive through. Distant _build_hills domes cover the horizon.
+	return
 	var asset := ""
 	match track.theme:
 		"grass", "cherry": asset = "hills_far"
