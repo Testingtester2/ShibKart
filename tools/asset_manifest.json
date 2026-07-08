@@ -17,7 +17,7 @@
       "transparent": false,
       "tileable": true,
       "denoise": 0.78,
-      "prompt": "seamless tileable dark grey race-track asphalt road texture with faint lane wear, top-down"
+      "prompt": "seamless tileable worn dark asphalt race track, visible cracks tar patches and aggregate, faint scuffed tyre marks, top-down, high detail"
     },
     {
       "name": "grass_ground",
@@ -77,7 +77,7 @@
       "transparent": false,
       "tileable": true,
       "denoise": 0.78,
-      "prompt": "seamless tileable cracked sandy tarmac desert road, top-down"
+      "prompt": "seamless tileable cracked sun-bleached tarmac desert road with sand drift and tyre scuffs, top-down, high detail"
     },
     {
       "name": "desert_ground",
@@ -811,6 +811,63 @@
       "transparent": true,
       "denoise": 0.7,
       "prompt": "a cute tropical beach resort building with palm roof, cute chibi cartoon game art, bright colors, on a solid pure black background, no shadow"
+    }
+  ],
+  "decor": [
+    {
+      "name": "cloud",
+      "shape": "cloud",
+      "size": [
+        512,
+        320
+      ],
+      "transparent": true,
+      "denoise": 0.7,
+      "prompt": "a big fluffy white puffy cartoon cloud, cute chibi cartoon game art, bright colors, on a solid pure black background, no shadow"
+    },
+    {
+      "name": "hills_far",
+      "shape": "hills",
+      "size": [
+        1024,
+        340
+      ],
+      "transparent": true,
+      "denoise": 0.7,
+      "prompt": "distant rolling green hills dotted with trees, soft cartoon scenery backdrop, cute chibi cartoon game art, bright colors, on a solid pure black background, no shadow"
+    },
+    {
+      "name": "mesa_far",
+      "shape": "mesa",
+      "size": [
+        1024,
+        420
+      ],
+      "transparent": true,
+      "denoise": 0.7,
+      "prompt": "distant red-rock desert mesas and buttes, cartoon scenery backdrop, cute chibi cartoon game art, bright colors, on a solid pure black background, no shadow"
+    },
+    {
+      "name": "banner_a",
+      "shape": "sign",
+      "size": [
+        512,
+        208
+      ],
+      "transparent": false,
+      "denoise": 0.72,
+      "prompt": "a colourful cartoon race sponsor billboard with bold geometric shapes and stripes, flat front view, no text"
+    },
+    {
+      "name": "banner_b",
+      "shape": "sign",
+      "size": [
+        512,
+        208
+      ],
+      "transparent": false,
+      "denoise": 0.72,
+      "prompt": "a bright cartoon advertising board, bold diagonal stripes and a round emblem, flat front view, no text"
     }
   ]
 }

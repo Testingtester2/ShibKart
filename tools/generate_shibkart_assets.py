@@ -65,6 +65,7 @@ CATEGORY_DIR = {
     "karts": ASSETS / "karts", "ui": ASSETS / "ui",
     "icons": ASSETS / "ui" / "icons", "emblems": ASSETS / "ui" / "emblems",
     "landmarks": ASSETS / "landmarks",
+    "decor": ASSETS / "decor",
 }
 
 # reuse the proven spritegen ComfyUI client + bg_remove
@@ -291,6 +292,19 @@ def draw_silhouette(shape: str, w: int, h: int, opaque: bool, sd: int) -> Image.
         d.rectangle([w * 0.2, h * 0.5, w * 0.8, h * 0.92], fill=(180, 60, 50, 255))
         d.polygon([(w * 0.2, h * 0.5), (w * 0.8, h * 0.5), (w * 0.7, h * 0.3), (w * 0.3, h * 0.3)], fill=(150, 50, 42, 255))
         d.rectangle([w * 0.42, h * 0.62, w * 0.58, h * 0.92], fill=(120, 40, 34, 255))
+    elif shape == "cloud":
+        for (ox, oy, r) in [(0.34,0.58,0.22),(0.5,0.48,0.3),(0.66,0.58,0.22),(0.5,0.66,0.2)]:
+            d.ellipse([w*(ox-r),h*(oy-r),w*(ox+r),h*(oy+r)], fill=(245,246,250,255))
+    elif shape == "hills":
+        for (ox,r) in [(0.22,0.5),(0.5,0.62),(0.8,0.46)]:
+            d.ellipse([w*(ox-r),h*(0.95-r*0.8),w*(ox+r),h*(0.95+r)], fill=(74,150,82,255))
+    elif shape == "mesa":
+        d.rectangle([w*0.08,h*0.5,w*0.42,h*0.97], fill=(172,92,60,255))
+        d.rectangle([w*0.5,h*0.36,w*0.9,h*0.97], fill=(184,104,66,255))
+    elif shape == "sign":
+        d.rectangle([0,0,w,h], fill=(66,140,210,255))
+        d.rectangle([w*0.1,h*0.32,w*0.9,h*0.62], fill=(242,202,64,255))
+        d.ellipse([w*0.4,h*0.12,w*0.6,h*0.44], fill=(228,72,60,255))
     else:
         d.ellipse([cx-w*0.35,cy-h*0.35,cx+w*0.35,cy+h*0.35], fill=(200,200,210,255))
     return img

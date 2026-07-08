@@ -99,8 +99,13 @@ func _ready() -> void:
 	_build_environment()
 	_build_track_mesh()
 	_build_center_line()
+	_build_edge_lines()
 	_build_scenery()
 	_build_banners()
+	_build_roadside_boards()
+	_build_corner_signs()
+	_build_backdrop()
+	_build_clouds()
 	_build_props()
 	_build_item_boxes()
 	_spawn_karts()
@@ -162,13 +167,13 @@ func _build_environment() -> void:
 	env.background_mode = Environment.BG_SKY
 	env.sky = sky
 	env.ambient_light_source = Environment.AMBIENT_SOURCE_SKY
-	env.ambient_light_energy = 0.6 if (wet == "rain" or wet == "fog") else 0.85
+	env.ambient_light_energy = 0.7 if (wet == "rain" or wet == "fog") else 1.05
 	# distance fog — denser in foggy/rainy/snowy weather
 	env.fog_enabled = true
 	env.fog_light_color = sky_hor
 	env.fog_sun_scatter = 0.1
 	# lighter fog so colours don't wash out (was too hazy)
-	env.fog_density = {"fog": 0.028, "rain": 0.014, "snow": 0.012}.get(wet, 0.0035)
+	env.fog_density = {"fog": 0.028, "rain": 0.014, "snow": 0.012}.get(wet, 0.0022)
 	# bloom / tonemap for the polished arcade look (Forward+ only)
 	env.glow_enabled = true
 	env.glow_intensity = 0.5
@@ -181,7 +186,7 @@ func _build_environment() -> void:
 	env.adjustment_enabled = true
 	env.adjustment_saturation = 1.3
 	env.adjustment_contrast = 1.1
-	env.adjustment_brightness = 0.98
+	env.adjustment_brightness = 1.03
 	# soft ambient-occlusion contact shadows for the modern stylized look (Forward+)
 	env.ssao_enabled = true
 	env.ssao_radius = 2.0
@@ -193,8 +198,8 @@ func _build_environment() -> void:
 
 	var sun := DirectionalLight3D.new()
 	sun.rotation_degrees = Vector3(-52, -40, 0)
-	sun.light_energy = 0.85 if (wet == "rain" or wet == "fog") else 1.4
-	sun.light_color = ground_col.lightened(0.6) if track.theme == "volcano" else Color.WHITE
+	sun.light_energy = 1.0 if (wet == "rain" or wet == "fog") else 1.7
+	sun.light_color = ground_col.lightened(0.6) if track.theme == "volcano" else Color(1.0, 0.96, 0.88)
 	sun.shadow_enabled = true
 	add_child(sun)
 	# soft fill light from the opposite side for rim/roundness
@@ -321,7 +326,7 @@ func _road_material() -> StandardMaterial3D:
 	var rt := _tex("tiles", theme_set.get("road", ""))
 	if rt:
 		m.albedo_texture = rt
-		m.uv1_scale = Vector3(1.4, 1.0, 1.0)
+		m.uv1_scale = Vector3(3.0, 1.0, 1.0)   # tile across the road so asphalt detail shows
 		m.albedo_color = Color.WHITE
 	return m
 
@@ -1301,3 +1306,184 @@ func _update_item_hud() -> void:
 	else:
 		var extra := "  x%d" % player.item_charges if player.item_charges > 1 else ""
 		lbl_item.text = "ITEM  [ %s ]%s   (E)" % [player.held_item.to_upper(), extra]
+
+
+# ---- painted road-edge lines + roadside sponsor boards (Mario-Kart track dressing) ----
+func _lat(i: int, off_m: float, y: float) -> Vector3:
+	# a point offset laterally from centreline waypoint i by off_m METRES
+	var dir := track.heading_at(i)
+	var right := Vector2(-dir.y, dir.x)
+	var pt := track.waypoints[i] + right * (off_m / WORLD_SCALE)
+	return _v3(pt, y)
+
+func _ribbon(off_a: float, off_b: float, y: float, col: Color, emis: float = 0.0) -> void:
+	var n := track.waypoints.size()
+	var st := SurfaceTool.new()
+	st.begin(Mesh.PRIMITIVE_TRIANGLES)
+	for i in range(n):
+		var j := (i + 1) % n
+		var ra := _lat(i, off_a, y)
+		var rb := _lat(i, off_b, y)
+		var rc := _lat(j, off_b, y)
+		var rd := _lat(j, off_a, y)
+		for v in [ra, rd, rc, ra, rc, rb]:
+			st.add_vertex(v)
+	st.generate_normals()
+	var mi := MeshInstance3D.new()
+	mi.mesh = st.commit()
+	var m := StandardMaterial3D.new()
+	m.albedo_color = col
+	m.cull_mode = BaseMaterial3D.CULL_DISABLED
+	if emis > 0.0:
+		m.emission_enabled = true
+		m.emission = col
+		m.emission_energy_multiplier = emis
+	mi.material_override = m
+	add_child(mi)
+
+func _build_edge_lines() -> void:
+	# a crisp white line just inside each road edge -> instantly reads as a race track
+	var half_m := track.width * 0.5 * WORLD_SCALE
+	_ribbon(half_m - 1.25, half_m - 0.70, ROAD_Y + 0.02, Color(1, 1, 1), 0.3)
+	_ribbon(-(half_m - 0.70), -(half_m - 1.25), ROAD_Y + 0.02, Color(1, 1, 1), 0.3)
+
+func _build_roadside_boards() -> void:
+	# colourful sponsor-style signboards on posts, lining the track, alternating sides
+	var n := track.waypoints.size()
+	var half := track.width * 0.5
+	var cols := [Color("#e8503a"), Color("#3aa0e8"), Color("#39c56a"), Color("#ffcf3a"), Color("#a05ad6")]
+	var step := maxi(4, n / 22)
+	var k := 0
+	var i := 0
+	while i < n:
+		var dir := track.heading_at(i)
+		var nrm := Vector2(-dir.y, dir.x)
+		var side := 1.0 if (k % 2 == 0) else -1.0
+		var base := track.waypoints[i] + nrm * side * (half + 20.0)
+		var post := MeshInstance3D.new()
+		post.mesh = _box(Vector3(0.25, 3.0, 0.25))
+		post.material_override = _flat(Color("#c8c8c8"))
+		add_child(post)
+		post.position = _v3(base, 1.5)
+		var board := MeshInstance3D.new()
+		board.mesh = _box(Vector3(4.2, 1.7, 0.22))
+		var c: Color = cols[k % cols.size()]
+		var m := _flat(c)
+		var bt := _tex("decor", "banner_a" if k % 2 == 0 else "banner_b")
+		if bt != null:
+			m.albedo_texture = bt
+			m.albedo_color = Color.WHITE
+		else:
+			m.emission_enabled = true
+			m.emission = c
+			m.emission_energy_multiplier = 0.28
+		board.material_override = m
+		add_child(board)
+		board.position = _v3(base, 3.5)
+		var toward := track.waypoints[i] - base
+		board.rotation.y = atan2(toward.x, toward.y)
+		k += 1
+		i += step
+
+
+# ---- corner hazard signs, horizon backdrop, sky clouds (Mario-Kart world feel) ----
+func _build_corner_signs() -> void:
+	# bright yellow/red hazard boards on the outside of sharp corners
+	var n := track.waypoints.size()
+	var half := track.width * 0.5
+	var i := 0
+	while i < n:
+		var a := track.waypoints[(i - 3 + n) % n]
+		var b := track.waypoints[(i + 3) % n]
+		var c := track.waypoints[i]
+		var d0 := (c - a)
+		var d1 := (b - c)
+		d0 = d0.normalized() if d0.length() > 0.001 else Vector2.RIGHT
+		d1 = d1.normalized() if d1.length() > 0.001 else Vector2.RIGHT
+		var crossz := d0.x * d1.y - d0.y * d1.x
+		if absf(crossz) < 0.25:
+			i += 2
+			continue
+		var dir := track.heading_at(i)
+		var nrm := Vector2(-dir.y, dir.x)
+		var side := -signf(crossz)              # outside of the bend
+		var base := c + nrm * side * (half + 16.0)
+		var post := MeshInstance3D.new()
+		post.mesh = _box(Vector3(0.3, 3.4, 0.3))
+		post.material_override = _flat(Color("#4a4a4a"))
+		add_child(post)
+		post.position = _v3(base, 1.7)
+		var board := MeshInstance3D.new()
+		board.mesh = _box(Vector3(3.4, 2.2, 0.28))
+		var ym := _flat(Color("#ffd21e"))
+		ym.emission_enabled = true
+		ym.emission = Color("#ffd21e")
+		ym.emission_energy_multiplier = 0.45
+		board.material_override = ym
+		add_child(board)
+		board.position = _v3(base, 3.7)
+		var toward := c - base
+		board.rotation.y = atan2(toward.x, toward.y)
+		for sx: float in [-0.7, 0.7]:
+			var stripe := MeshInstance3D.new()
+			stripe.mesh = _box(Vector3(0.55, 2.7, 0.06))
+			var sm := _flat(Color("#e23b3b"))
+			sm.emission_enabled = true
+			sm.emission = Color("#e23b3b")
+			sm.emission_energy_multiplier = 0.4
+			stripe.material_override = sm
+			board.add_child(stripe)
+			stripe.position = Vector3(sx, 0, 0.17)
+			stripe.rotation = Vector3(0, 0, deg_to_rad(35))
+		i += maxi(3, n / 12)
+
+func _build_backdrop() -> void:
+	# a ring of distant scenery billboards so the horizon isn't empty
+	var asset := ""
+	match track.theme:
+		"grass", "cherry": asset = "hills_far"
+		"desert", "beach", "volcano": asset = "mesa_far"
+		_: return
+	var tex := _tex("decor", asset)
+	if tex == null:
+		return
+	var b := track.bounds()
+	var c := b.get_center()
+	var r := maxf(b.size.x, b.size.y) * 0.6 + 650.0
+	var cnt := 12
+	for k in range(cnt):
+		var ang := TAU * float(k) / float(cnt)
+		var p := c + Vector2(cos(ang), sin(ang)) * r
+		var spr := Sprite3D.new()
+		spr.texture = tex
+		spr.billboard = BaseMaterial3D.BILLBOARD_FIXED_Y
+		spr.shaded = false
+		spr.transparent = true
+		var world_h := 95.0
+		spr.pixel_size = world_h / float(maxi(tex.get_height(), 1))
+		spr.position = _v3(p, world_h * 0.42)
+		add_child(spr)
+
+func _build_clouds() -> void:
+	if track.theme == "moon":
+		return
+	var tex := _tex("decor", "cloud")
+	if tex == null:
+		return
+	var b := track.bounds()
+	var c := b.get_center()
+	var r := maxf(b.size.x, b.size.y) * 0.55 + 380.0
+	var cnt := 11
+	for k in range(cnt):
+		var ang := TAU * float(k) / float(cnt) + 0.3
+		var rr := r * (0.8 + 0.08 * float((k * 7) % 5))
+		var p := c + Vector2(cos(ang), sin(ang)) * rr
+		var spr := Sprite3D.new()
+		spr.texture = tex
+		spr.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+		spr.shaded = false
+		spr.transparent = true
+		var world_h := 55.0 + 20.0 * float(k % 3)
+		spr.pixel_size = world_h / float(maxi(tex.get_height(), 1))
+		spr.position = _v3(p, 60.0 + 14.0 * float(k % 4))
+		add_child(spr)
