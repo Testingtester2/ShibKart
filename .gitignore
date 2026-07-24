@@ -3,3 +3,6 @@ dist
 .env
 .DS_Store
 *.local
+
+# generated concept images + duplicate meshes (the real GLBs live in public/models)
+tools/comfy3d/out/

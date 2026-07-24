@@ -28,17 +28,17 @@ export function RaceView({ params, selfId, onFinish }: { params: RaceParams; sel
 
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setPixelRatio(Math.min(devicePixelRatio, 2)); renderer.setSize(el.clientWidth, el.clientHeight);
-    renderer.outputColorSpace = THREE.SRGBColorSpace; renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.outputColorSpace = THREE.SRGBColorSpace; renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.08;
     el.appendChild(renderer.domElement);
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(track.palette.sky);
-    scene.fog = new THREE.Fog(track.palette.fog, 150, 420);
+    scene.fog = new THREE.Fog(track.palette.fog, 240, 720);
     scene.add(skyDome(track.theme));
     const _pmrem = new THREE.PMREMGenerator(renderer);
     scene.environment = _pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
-    const cam = new THREE.PerspectiveCamera(64, el.clientWidth / el.clientHeight, 0.1, 1200);
-    const sun = new THREE.DirectionalLight(track.palette.sun, 1.45); sun.position.set(40, 70, 20); scene.add(sun);
-    scene.add(new THREE.HemisphereLight(track.palette.sky, track.palette.ground, 0.85));
+    const cam = new THREE.PerspectiveCamera(70, el.clientWidth / el.clientHeight, 0.1, 1600);
+    const sun = new THREE.DirectionalLight(track.palette.sun, 1.7); sun.position.set(40, 70, 20); scene.add(sun);
+    scene.add(new THREE.HemisphereLight(track.palette.sky, track.palette.ground, 0.55));
 
     const groundMat = new THREE.MeshStandardMaterial({ color: track.palette.ground, roughness: 1 });
     if (groundTex(track.theme)) applyTex(groundMat, `/assets/track/${groundTex(track.theme)}.png`, 220, 220);
@@ -65,6 +65,8 @@ export function RaceView({ params, selfId, onFinish }: { params: RaceParams; sel
         const model = await loadModel(KART_NAMES[s.body] ?? "kart_standard");
         if (model) { fitToGround(model, 2.7); holder.add(model); }
         else { holder.add(buildKart(s.body, s.color)); }
+        const shadow = new THREE.Mesh(new THREE.CircleGeometry(1.5, 20), new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.3, depthWrite: false }));
+        shadow.rotation.x = -Math.PI / 2; shadow.position.y = 0.03; holder.add(shadow);
         const kb = new THREE.Box3().setFromObject(holder); const kt = Math.max(kb.max.y, 0.6);
         const d = await makeDriver(FURS.indexOf(s.fur));
         const box = new THREE.Box3().setFromObject(d.object); const sz = new THREE.Vector3(); box.getSize(sz);
@@ -138,8 +140,8 @@ export function RaceView({ params, selfId, onFinish }: { params: RaceParams; sel
       boxMeshes.forEach((m, i) => { m.visible = engine.boxes[i].cd <= 0; m.rotation.y += dt * 2; });
 
       const pose = poseOf(selfId); const fx = Math.sin(pose.heading), fz = Math.cos(pose.heading);
-      camPos.lerp(new THREE.Vector3(pose.x - fx * 9, 4.4, pose.z - fz * 9), Math.min(1, dt * 5));
-      cam.position.copy(camPos); cam.lookAt(pose.x + fx * 4, 1.2, pose.z + fz * 4);
+      camPos.lerp(new THREE.Vector3(pose.x - fx * 7.6, 3.5, pose.z - fz * 7.6), Math.min(1, dt * 6));
+      cam.position.copy(camPos); cam.lookAt(pose.x + fx * 7, 1.4, pose.z + fz * 7);
 
       const me = engine.karts.find((k) => k.id === selfId);
       if (me && hud.current) {
@@ -239,7 +241,7 @@ const THEME_PROP: Record<string, string> = { grass: "tree_round", cherry: "tree_
 async function buildScenery(scene: THREE.Scene, cl: Vec2[], width: number, theme: string) {
   const model = await loadModel(THEME_PROP[theme] ?? "tree_round"); if (!model) return;
 
-  for (let i = 0; i < cl.length; i += 11) {
+  for (let i = 0; i < cl.length; i += 8) {
     const a = cl[i], b = cl[(i + 1) % cl.length];
     const dir = new THREE.Vector2(b[0] - a[0], b[1] - a[1]).normalize(); const nx = -dir.y, nz = dir.x;
     for (const side of [-1, 1]) {
