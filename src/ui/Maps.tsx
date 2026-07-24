@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { TRACKS } from "../game/track";
+import { MapThumb } from "./MapThumb";
 
 export function Maps({ onBack, tournament, settings }: { onBack: () => void; tournament?: boolean; settings?: boolean }) {
   const [sel, setSel] = useState(TRACKS[0].id);
@@ -8,15 +9,11 @@ export function Maps({ onBack, tournament, settings }: { onBack: () => void; tou
     <div className="screen">
       <button className="back-btn" onClick={onBack}>← Menu</button>
       <h2>{title}</h2>
-      {tournament && <div className="panel-card">On-chain tournaments run on the locked <b>WutTournament</b> contract. Connect your wallet in the lobby to enter — results report to the contract. (Wiring live in the PvP flow.)</div>}
-      {settings && <div className="panel-card">Audio, controls and graphics options land here. Racing uses WASD / arrows + Space to drift.</div>}
-      <div className="grid">
-        {TRACKS.map((t) => (
-          <div key={t.id} className={`tile ${sel === t.id ? "sel" : ""}`} onClick={() => setSel(t.id)}>
-            <div className="thumb" style={{ background: `linear-gradient(160deg, #${t.palette.sky.toString(16)}, #${t.palette.ground.toString(16)})` }} />
-            <div className="cap">{t.name}<small>{t.theme}</small></div>
-          </div>
-        ))}
+      {tournament && <div className="panel-card" style={{ maxWidth: 620 }}>On-chain tournaments run on the locked contract. Connect your wallet, enter, and the podium is paid from the pot. (Wiring lives in the PvP flow.)</div>}
+      {settings && <div className="panel-card" style={{ maxWidth: 620 }}>Racing: WASD / arrows to drive, Space to drift, E for items. Audio + graphics options land here.</div>}
+      {!tournament && !settings && <div style={{ opacity: 0.85, fontWeight: 700, marginBottom: 4 }}>{TRACKS.length} circuits — every biome, every layout</div>}
+      <div className="mapgrid">
+        {TRACKS.map((t) => <MapThumb key={t.id} track={t} selected={sel === t.id} onClick={() => setSel(t.id)} />)}
       </div>
     </div>
   );

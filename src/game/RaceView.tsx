@@ -1,5 +1,6 @@
 import { useEffect, useRef, type CSSProperties } from "react";
 import * as THREE from "three";
+import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
 import { trackById, centerline, nearest, type Vec2 } from "./track";
 import { RaceEngine } from "./engine";
 import { buildKart } from "./kart";
@@ -33,6 +34,8 @@ export function RaceView({ params, selfId, onFinish }: { params: RaceParams; sel
     scene.background = new THREE.Color(track.palette.sky);
     scene.fog = new THREE.Fog(track.palette.fog, 150, 420);
     scene.add(skyDome(track.theme));
+    const _pmrem = new THREE.PMREMGenerator(renderer);
+    scene.environment = _pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
     const cam = new THREE.PerspectiveCamera(64, el.clientWidth / el.clientHeight, 0.1, 1200);
     const sun = new THREE.DirectionalLight(track.palette.sun, 1.45); sun.position.set(40, 70, 20); scene.add(sun);
     scene.add(new THREE.HemisphereLight(track.palette.sky, track.palette.ground, 0.85));
@@ -42,7 +45,6 @@ export function RaceView({ params, selfId, onFinish }: { params: RaceParams; sel
     const ground = new THREE.Mesh(new THREE.PlaneGeometry(2000, 2000), groundMat); ground.rotation.x = -Math.PI / 2; ground.position.y = -0.02; scene.add(ground);
 
     const road = ribbon(cl, track.width, track.palette.road, 0.02, 0, 3, 8);
-    if (roadTex(track.theme)) applyTex(road.material as THREE.MeshStandardMaterial, `/assets/track/${roadTex(track.theme)}.png`, 1, 1);
     scene.add(road);
     scene.add(ribbon(cl, track.width * 0.05, 0xffffff, 0.05, track.width * 0.46));
     scene.add(ribbon(cl, track.width * 0.05, 0xffffff, 0.05, -track.width * 0.46));
@@ -60,13 +62,13 @@ export function RaceView({ params, selfId, onFinish }: { params: RaceParams; sel
       const holder = new THREE.Group(); scene.add(holder); vis.set(s.id, { group: holder, driver: null });
       (async () => {
         const model = await loadModel(KART_NAMES[s.body] ?? "kart_standard");
-        let seat: THREE.Vector3;
-        if (model) { fitToGround(model, 2.7); holder.add(model); seat = (model.userData.seat as THREE.Vector3) ?? new THREE.Vector3(0, 1.0, -0.1); }
-        else { const k = buildKart(s.body, s.color); holder.add(k); seat = k.userData.seat as THREE.Vector3; }
+        if (model) { fitToGround(model, 2.7); holder.add(model); }
+        else { holder.add(buildKart(s.body, s.color)); }
+        const kb = new THREE.Box3().setFromObject(holder); const kt = Math.max(kb.max.y, 0.6);
         const d = await makeDriver(FURS.indexOf(s.fur));
         const box = new THREE.Box3().setFromObject(d.object); const sz = new THREE.Vector3(); box.getSize(sz);
-        const sc = 1.3 / Math.max(sz.y, 0.001); d.object.scale.setScalar(sc);
-        d.object.position.set(seat.x, seat.y - box.min.y * sc, seat.z); d.object.rotation.y = Math.PI;
+        const sc = 1.2 / Math.max(sz.y, 0.001); d.object.scale.setScalar(sc);
+        d.object.position.set(0, kt * 0.5 - box.min.y * sc, 0.05); d.object.rotation.y = Math.PI;
         holder.add(d.object); const v = vis.get(s.id); if (v) v.driver = d;
       })();
     }
@@ -220,13 +222,12 @@ function boards(cl: Vec2[], width: number): THREE.Group {
 const THEME_PROP: Record<string, string> = { grass: "tree_round", cherry: "tree_round", desert: "cactus", snow: "snowman", beach: "palm", city: "sponsor_stand", moon: "rock", volcano: "rock" };
 async function buildScenery(scene: THREE.Scene, cl: Vec2[], width: number, theme: string) {
   const model = await loadModel(THEME_PROP[theme] ?? "tree_round"); if (!model) return;
-  const rock = await loadModel("tire_stack");
-  for (let i = 0; i < cl.length; i += 7) {
+
+  for (let i = 0; i < cl.length; i += 11) {
     const a = cl[i], b = cl[(i + 1) % cl.length];
     const dir = new THREE.Vector2(b[0] - a[0], b[1] - a[1]).normalize(); const nx = -dir.y, nz = dir.x;
     for (const side of [-1, 1]) {
-      const pick = (i % 5 === 0 && rock) ? rock : model;
-      const m = pick.clone(true); fitToGround(m, 3.6);
+      const m = model.clone(true); fitToGround(m, 2.3);
       m.position.set(a[0] + nx * side * (width / 2 + 4 + (i % 3)), 0, a[1] + nz * side * (width / 2 + 4));
       m.rotation.y = (i * 1.7 + (side > 0 ? 0 : 3.14)) % 6.28; scene.add(m);
     }

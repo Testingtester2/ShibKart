@@ -29,3 +29,16 @@
 .seg { display: flex; gap: 6px; }
 .seg button { padding: 8px 14px; border-radius: 10px; border: 1px solid var(--panel-line); background: rgba(0,0,0,.25); color: var(--text); font-weight: 800; cursor: pointer; }
 .seg button.on { background: var(--shib-orange); color: var(--ink); border-color: #fff; }
+
+/* map cards with track-shape preview */
+.mapgrid { display: grid; grid-template-columns: repeat(auto-fill, 240px); gap: 16px; justify-content: center; max-width: 1040px; margin: 8px auto 40px; padding: 0 16px; }
+.mapcard { padding: 0; border: 2px solid var(--panel-line); border-radius: 16px; overflow: hidden; cursor: pointer; background: var(--panel);
+  color: var(--text); text-align: left; transition: transform .14s ease, border-color .14s, box-shadow .14s; box-shadow: 0 8px 24px rgba(0,0,0,.35); }
+.mapcard:hover { transform: translateY(-5px); border-color: var(--shib-orange); box-shadow: 0 16px 40px rgba(0,0,0,.5); }
+.mapcard.sel { border-color: var(--cyan); box-shadow: 0 0 0 3px rgba(52,224,255,.35), 0 12px 32px rgba(0,0,0,.45); }
+.mapthumb { position: relative; height: 116px; }
+.mapthumb svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.mapbadge { position: absolute; top: 8px; right: 8px; background: var(--cyan); color: var(--ink); font-weight: 900; font-size: 12px; padding: 3px 9px; border-radius: 999px; }
+.mapcap { padding: 9px 12px; display: flex; flex-direction: column; gap: 2px; }
+.mapcap b { font-family: var(--font-display); font-size: 16px; }
+.mapcap span { font-size: 11px; opacity: .7; font-weight: 700; text-transform: uppercase; letter-spacing: .6px; }

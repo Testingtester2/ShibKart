@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Identity, fillWithAI } from "../state";
 import { TRACKS } from "../game/track";
+import { MapThumb } from "./MapThumb";
 import { Room, now } from "../net/net";
 import { netConfigured } from "../net/supa";
 import { PlayerSlot } from "../game/types";
@@ -75,12 +76,9 @@ export function Lobby({ identity, onBack, onStart }: { identity: Identity; onBac
       </div>
 
       <h2 style={{ fontSize: 24 }}>Vote a map</h2>
-      <div className="grid">
+      <div className="mapgrid">
         {TRACKS.map((t) => (
-          <div key={t.id} className={`tile ${sel === t.id ? "sel" : ""}`} onClick={() => vote(t.id)}>
-            <div className="thumb" style={{ background: `linear-gradient(160deg, #${t.palette.sky.toString(16)}, #${t.palette.ground.toString(16)})` }} />
-            <div className="cap">{t.name}<small>{voteCount(t.id) ? `▲ ${voteCount(t.id)}` : t.theme}</small></div>
-          </div>
+          <MapThumb key={t.id} track={t} selected={sel === t.id} badge={voteCount(t.id) ? `▲ ${voteCount(t.id)}` : undefined} onClick={() => vote(t.id)} />
         ))}
       </div>
 

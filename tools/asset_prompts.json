@@ -389,6 +389,6 @@
       "subject": "a cute translucent ghost power-up"
     }
   ],
-  "tile_anchor": "flat top-down seamless repeating ground texture, hand-painted stylized cartoon surface, bright clean colours matching a colourful Shiba-themed kart racer, texture only \u2014 absolutely no characters, no dogs, no karts, no vehicles, no people, no logos, no signs, no horizon, fills the frame edge to edge",
+  "tile_anchor": "flat top-down seamless repeating ground surface texture, hand-painted stylized cartoon, bright and clean, texture only \u2014 no characters, no dogs, no karts, no vehicles, no people, no logos, no signs, no horizon, no perspective, fills the frame edge to edge",
   "_tile_denoise": 0.85
 }
