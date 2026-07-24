@@ -16,6 +16,7 @@ export function MapThumb({ track, selected, badge, onClick }: { track: TrackDef;
   return (
     <button className={`mapcard ${selected ? "sel" : ""}`} onClick={onClick} type="button">
       <div className="mapthumb" style={{ background: grad }}>
+        <img className="mapsky" src={`/assets/sky/${track.theme}.png`} alt="" onError={(e) => ((e.target as HTMLImageElement).style.display = "none")} />
         <svg viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none">
           <polygon points={poly} fill="rgba(20,12,40,0.28)" stroke="rgba(255,255,255,0.9)" strokeWidth="7" strokeLinejoin="round" />
           <polygon points={poly} fill="none" stroke={hx(track.palette.road)} strokeWidth="3" strokeLinejoin="round" />

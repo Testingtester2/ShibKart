@@ -16,7 +16,7 @@ export interface KartState {
 }
 
 export interface Hazard { id: number; kind: "banana" | "oil"; x: number; z: number; life: number; }
-export interface Shell { id: number; x: number; z: number; heading: number; life: number; owner: string; }
+export interface Shell { id: number; x: number; z: number; heading: number; life: number; owner: string; kind: "bone" | "shell"; }
 
 export interface RaceSnapshot {
   t: number;

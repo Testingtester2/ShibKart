@@ -54,7 +54,8 @@ export function RaceView({ params, selfId, onFinish }: { params: RaceParams; sel
     loadModel("item_box").then((model) => { if (!model) return; engine.boxes.forEach((b, i) => { scene.remove(boxMeshes[i]); const m = model.clone(true); fitToGround(m, 1.6); m.position.set(b.x, 1.1, b.z); scene.add(m); boxMeshes[i] = m as any; }); });
     buildScenery(scene, cl, track.width, track.theme);
     buildStartArch(scene, cl, track.width);
-    const hazMesh = new Map<number, THREE.Mesh>(), shellMesh = new Map<number, THREE.Mesh>();
+    buildTown(scene, cl);
+    const hazMesh = new Map<number, THREE.Object3D>(), shellMesh = new Map<number, THREE.Object3D>();
 
     const KART_NAMES = ["kart_standard", "kart_sport", "kart_heavy"];
     const vis = new Map<string, { group: THREE.Group; driver: { update: (d: number) => void } | null }>();
@@ -77,7 +78,7 @@ export function RaceView({ params, selfId, onFinish }: { params: RaceParams; sel
     const kd = (e: KeyboardEvent) => { keys[e.key.toLowerCase()] = true; if (e.key === " ") e.preventDefault(); };
     const ku = (e: KeyboardEvent) => { keys[e.key.toLowerCase()] = false; };
     addEventListener("keydown", kd); addEventListener("keyup", ku);
-    const localInput = (): KartInput => ({ throttle: (keys["w"] || keys["arrowup"] ? 1 : 0) - (keys["s"] || keys["arrowdown"] ? 1 : 0), steer: (keys["d"] || keys["arrowright"] ? 1 : 0) - (keys["a"] || keys["arrowleft"] ? 1 : 0), drift: !!keys[" "], useItem: !!(keys["e"] || keys["shift"]) });
+    const localInput = (): KartInput => ({ throttle: (keys["w"] || keys["arrowup"] ? 1 : 0) - (keys["s"] || keys["arrowdown"] ? 1 : 0), steer: (keys["a"] || keys["arrowleft"] ? 1 : 0) - (keys["d"] || keys["arrowright"] ? 1 : 0), drift: !!keys[" "], useItem: !!(keys["e"] || keys["shift"]) });
 
     // guest prediction for the local kart
     const selfStart = engine.karts.find((k) => k.id === selfId)!;
@@ -132,8 +133,8 @@ export function RaceView({ params, selfId, onFinish }: { params: RaceParams; sel
         v.group.rotation.z = k.spin > 0 ? Math.sin(performance.now() * 0.02) * 0.3 : -Math.sign(k.driftDir) * (k.driftCharge > 0 ? 0.14 : 0);
         v.driver?.update(dt);
       }
-      syncPool(scene, hazMesh, engine.hazards, (h) => mkMesh(h.kind === "oil" ? 0x101014 : 0xffe14d, 0.5, h.x, 0.4, h.z), (m, h) => m.position.set(h.x, 0.4, h.z));
-      syncPool(scene, shellMesh, engine.shells, (s) => mkMesh(0xe23b3b, 0.5, s.x, 0.6, s.z, 0xff5a2a), (m, s) => m.position.set(s.x, 0.6, s.z));
+      syncPool(scene, hazMesh, engine.hazards, (h) => itemSprite(h.kind, 1.4, h.x, 0.6, h.z), (m, h) => m.position.set(h.x, 0.6, h.z));
+      syncPool(scene, shellMesh, engine.shells, (s) => itemSprite(s.kind, 1.3, s.x, 0.7, s.z), (m, s) => m.position.set(s.x, 0.7, s.z));
       boxMeshes.forEach((m, i) => { m.visible = engine.boxes[i].cd <= 0; m.rotation.y += dt * 2; });
 
       const pose = poseOf(selfId); const fx = Math.sin(pose.heading), fz = Math.cos(pose.heading);
@@ -185,7 +186,7 @@ function predictStep(p: Pose, inp: KartInput, cl: Vec2[], width: number, dt: num
 function mkMesh(color: number, r: number, x: number, y: number, z: number, emissive = 0x000000): THREE.Mesh {
   const m = new THREE.Mesh(new THREE.SphereGeometry(r, 10, 8), new THREE.MeshStandardMaterial({ color, emissive, emissiveIntensity: emissive ? 0.5 : 0 })); m.position.set(x, y, z); return m;
 }
-function syncPool<T extends { id: number }>(scene: THREE.Scene, map: Map<number, THREE.Mesh>, items: T[], make: (t: T) => THREE.Mesh, upd: (m: THREE.Mesh, t: T) => void) {
+function syncPool<T extends { id: number }>(scene: THREE.Scene, map: Map<number, THREE.Object3D>, items: T[], make: (t: T) => THREE.Object3D, upd: (m: THREE.Object3D, t: T) => void) {
   const live = new Set(items.map((i) => i.id));
   for (const [id, m] of map) if (!live.has(id)) { scene.remove(m); map.delete(id); }
   for (const it of items) { let m = map.get(it.id); if (!m) { m = make(it); scene.add(m); map.set(it.id, m); } else upd(m, it); }
@@ -218,6 +219,21 @@ function boards(cl: Vec2[], width: number): THREE.Group {
     const board = new THREE.Mesh(new THREE.BoxGeometry(4, 1.6, 0.2), mat); board.position.set(bx, 3.3, bz); board.lookAt(a[0], 3.3, a[1]); g.add(board);
   }
   return g;
+}
+const _itemTex = new Map<string, THREE.Texture>();
+function itemSprite(kind: string, size: number, x: number, y: number, z: number): THREE.Sprite {
+  let t = _itemTex.get(kind);
+  if (!t) { t = new THREE.TextureLoader().load(`/assets/items/${kind}.png`); t.colorSpace = THREE.SRGBColorSpace; _itemTex.set(kind, t); }
+  const spr = new THREE.Sprite(new THREE.SpriteMaterial({ map: t, transparent: true }));
+  spr.scale.set(size, size, 1); spr.position.set(x, y, z); return spr;
+}
+const TOWN = ["house_a", "house_b", "shop", "tower", "windmill", "streetlamp", "crowd_stand", "fountain"];
+async function buildTown(scene: THREE.Scene, cl: Vec2[]) {
+  const models = (await Promise.all(TOWN.map((n) => loadModel(n)))).filter(Boolean) as THREE.Object3D[];
+  if (!models.length) return;
+  let cx = 0, cz = 0; for (const p of cl) { cx += p[0]; cz += p[1]; } cx /= cl.length; cz /= cl.length;
+  let R = 0; for (const p of cl) R = Math.max(R, Math.hypot(p[0] - cx, p[1] - cz)); R += 16;
+  for (let a = 0; a < 26; a++) { const ang = (a / 26) * Math.PI * 2; const m = models[a % models.length].clone(true); fitToGround(m, 7); m.position.set(cx + Math.cos(ang) * R, 0, cz + Math.sin(ang) * R); m.rotation.y = -ang + Math.PI; scene.add(m); }
 }
 const THEME_PROP: Record<string, string> = { grass: "tree_round", cherry: "tree_round", desert: "cactus", snow: "snowman", beach: "palm", city: "sponsor_stand", moon: "rock", volcano: "rock" };
 async function buildScenery(scene: THREE.Scene, cl: Vec2[], width: number, theme: string) {

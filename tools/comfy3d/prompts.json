@@ -2,19 +2,115 @@
   "_comment": "ShibKart karts + world props. One clean object per prompt, plain background (image-to-3D hates clutter). Names match what the game loads: kart_standard/kart_sport/kart_heavy and props by name. Characters/Boshis come from BoshiCore, not here.",
   "style_suffix": "single clean 3D game asset, chibi cartoon kart-racing style, chunky readable silhouette, soft rounded forms with clean edges, bright saturated shiba-orange cyan and violet palette, glossy Mario-Kart-8 polish, centered, full object visible, plain flat neutral background, no ground, no shadow",
   "assets": [
-    { "name": "kart_standard", "category": "karts", "prompt": "a cute go-kart racing kart, standard balanced build, four fat wheels, empty driver seat, orange bodywork" },
-    { "name": "kart_sport",    "category": "karts", "prompt": "a cute go-kart, low sleek sporty build with a rear spoiler wing, empty driver seat, cyan bodywork" },
-    { "name": "kart_heavy",    "category": "karts", "prompt": "a cute go-kart, chunky heavy build with big chunky tyres and a roll bar, empty driver seat, violet bodywork" },
-    { "name": "item_box",      "category": "props", "prompt": "a floating glossy cube item box with a rainbow question mark on each face" },
-    { "name": "boost_pad",     "category": "props", "prompt": "a flat glowing orange chevron boost pad arrow panel" },
-    { "name": "tree_round",    "category": "props", "prompt": "a cute round stylized cartoon tree with a stubby trunk" },
-    { "name": "cactus",        "category": "props", "prompt": "a cute cartoon saguaro cactus" },
-    { "name": "rock",          "category": "props", "prompt": "a cute stylized rounded boulder rock" },
-    { "name": "sponsor_stand", "category": "props", "prompt": "a small race sponsor billboard sign mounted on two posts" },
-    { "name": "start_arch",    "category": "props", "prompt": "a checkered race start-finish archway gate over the road" },
-    { "name": "tire_stack",    "category": "props", "prompt": "a stack of racing tyres used as a track barrier" },
-    { "name": "coin",          "category": "props", "prompt": "a shiny gold coin embossed with a dog paw print" },
-    { "name": "palm",          "category": "props", "prompt": "a cute cartoon palm tree" },
-    { "name": "snowman",       "category": "props", "prompt": "a cute cartoon snowman with a scarf" }
+    {
+      "name": "kart_standard",
+      "category": "karts",
+      "prompt": "a cute go-kart racing kart, standard balanced build, four fat wheels, empty driver seat, orange bodywork"
+    },
+    {
+      "name": "kart_sport",
+      "category": "karts",
+      "prompt": "a cute go-kart, low sleek sporty build with a rear spoiler wing, empty driver seat, cyan bodywork"
+    },
+    {
+      "name": "kart_heavy",
+      "category": "karts",
+      "prompt": "a cute go-kart, chunky heavy build with big chunky tyres and a roll bar, empty driver seat, violet bodywork"
+    },
+    {
+      "name": "item_box",
+      "category": "props",
+      "prompt": "a floating glossy cube item box with a rainbow question mark on each face"
+    },
+    {
+      "name": "boost_pad",
+      "category": "props",
+      "prompt": "a flat glowing orange chevron boost pad arrow panel"
+    },
+    {
+      "name": "tree_round",
+      "category": "props",
+      "prompt": "a cute round stylized cartoon tree with a stubby trunk"
+    },
+    {
+      "name": "cactus",
+      "category": "props",
+      "prompt": "a cute cartoon saguaro cactus"
+    },
+    {
+      "name": "rock",
+      "category": "props",
+      "prompt": "a cute stylized rounded boulder rock"
+    },
+    {
+      "name": "sponsor_stand",
+      "category": "props",
+      "prompt": "a small race sponsor billboard sign mounted on two posts"
+    },
+    {
+      "name": "start_arch",
+      "category": "props",
+      "prompt": "a checkered race start-finish archway gate over the road"
+    },
+    {
+      "name": "tire_stack",
+      "category": "props",
+      "prompt": "a stack of racing tyres used as a track barrier"
+    },
+    {
+      "name": "coin",
+      "category": "props",
+      "prompt": "a shiny gold coin embossed with a dog paw print"
+    },
+    {
+      "name": "palm",
+      "category": "props",
+      "prompt": "a cute cartoon palm tree"
+    },
+    {
+      "name": "snowman",
+      "category": "props",
+      "prompt": "a cute cartoon snowman with a scarf"
+    },
+    {
+      "name": "house_a",
+      "category": "world",
+      "prompt": "a cute chibi cartoon shiba town house, sloped roof, round door and windows, warm colors"
+    },
+    {
+      "name": "house_b",
+      "category": "world",
+      "prompt": "a cute chibi cartoon two-storey shiba town house, balcony, bright paint"
+    },
+    {
+      "name": "shop",
+      "category": "world",
+      "prompt": "a cute chibi cartoon corner shop storefront with an awning and a sign"
+    },
+    {
+      "name": "tower",
+      "category": "world",
+      "prompt": "a cute chibi cartoon clock tower building"
+    },
+    {
+      "name": "windmill",
+      "category": "world",
+      "prompt": "a cute chibi cartoon windmill with sails"
+    },
+    {
+      "name": "streetlamp",
+      "category": "world",
+      "prompt": "a cute cartoon street lamp post"
+    },
+    {
+      "name": "crowd_stand",
+      "category": "world",
+      "prompt": "a small cartoon spectator grandstand with striped roof"
+    },
+    {
+      "name": "fountain",
+      "category": "world",
+      "prompt": "a cute cartoon stone plaza fountain"
+    }
   ]
 }

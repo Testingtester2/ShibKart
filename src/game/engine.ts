@@ -163,8 +163,8 @@ export class RaceEngine {
     const it = k.item;
     const fwd: Vec2 = [Math.sin(k.heading), Math.cos(k.heading)];
     if (it === "banana" || it === "oil") this.hazards.push({ id: this._id++, kind: it, x: k.x - fwd[0] * 3, z: k.z - fwd[1] * 3, life: 20 });
-    else if (it === "bone" || it === "triple_bone") this.shells.push({ id: this._id++, x: k.x + fwd[0] * 3, z: k.z + fwd[1] * 3, heading: k.heading, life: 3, owner: k.id });
-    else if (it === "shell") { const tgt = this.aheadOf(k); this.shells.push({ id: this._id++, x: k.x + fwd[0] * 3, z: k.z + fwd[1] * 3, heading: k.heading, life: 6, owner: k.id }); void tgt; }
+    else if (it === "bone" || it === "triple_bone") this.shells.push({ id: this._id++, x: k.x + fwd[0] * 3, z: k.z + fwd[1] * 3, heading: k.heading, life: 3, owner: k.id, kind: "bone" });
+    else if (it === "shell") { this.shells.push({ id: this._id++, x: k.x + fwd[0] * 3, z: k.z + fwd[1] * 3, heading: k.heading, life: 6, owner: k.id, kind: "shell" }); }
     else if (it === "shield") k.shield = 6;
     else if (it === "ghost") { k.boost = Math.max(k.boost, 1.5); k.shield = 3; }
     else if (it === "lightning") for (const o of this.karts) if (o !== k && this.progress(o) > this.progress(k)) { o.spin = 1.5; o.speed *= 0.4; }
