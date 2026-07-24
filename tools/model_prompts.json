@@ -1,0 +1,18 @@
+{
+  "_note": "3D models (Hunyuan3D in ComfyUI). gen_models.py makes a clean reference image via the edit pipeline, then image->3D through your exported hunyuan3d_workflow.json, saving public/models/<name>.glb. The game auto-loads these (kart_standard/sport/heavy for the 3 bodies; props by name) with procedural fallback.",
+  "ref_style": "single game asset, 3/4 three-quarter view, centered, plain flat white background, full object visible, clean, no ground, no shadow, chibi cartoon, bold outline",
+  "models": [
+    { "name": "kart_standard", "subject": "a cute chibi go-kart racing kart, standard balanced build, empty driver seat, shiba-orange body" },
+    { "name": "kart_sport",    "subject": "a cute chibi go-kart, low sleek sporty build with a rear wing, empty seat, cyan body" },
+    { "name": "kart_heavy",    "subject": "a cute chibi go-kart, chunky heavy build with big fat wheels and a roll bar, empty seat, violet body" },
+    { "name": "item_box",      "subject": "a floating glossy rainbow question-mark item box cube" },
+    { "name": "boost_pad",     "subject": "a glowing orange chevron boost pad arrow panel" },
+    { "name": "tree_round",    "subject": "a cute round stylized cartoon tree" },
+    { "name": "cactus",        "subject": "a cute cartoon saguaro cactus" },
+    { "name": "rock",          "subject": "a cute stylized boulder rock" },
+    { "name": "sponsor_stand", "subject": "a small race sponsor billboard sign on two posts" },
+    { "name": "start_arch",    "subject": "a checkered race start-finish archway gate" },
+    { "name": "tire_stack",    "subject": "a stack of racing tyres barrier" },
+    { "name": "coin",          "subject": "a shiny gold coin embossed with a paw print" }
+  ]
+}

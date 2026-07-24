@@ -1,0 +1,19 @@
+[
+  {"type":"constructor","stateMutability":"nonpayable","inputs":[{"name":"signer","type":"address"}]},
+  {"type":"function","name":"createTournament","stateMutability":"payable","inputs":[{"name":"maxPlayers","type":"uint16"},{"name":"entryFee","type":"uint96"},{"name":"races","type":"uint8"},{"name":"closed","type":"bool"}],"outputs":[{"name":"id","type":"uint256"}]},
+  {"type":"function","name":"join","stateMutability":"payable","inputs":[{"name":"id","type":"uint256"}],"outputs":[]},
+  {"type":"function","name":"lock","stateMutability":"nonpayable","inputs":[{"name":"id","type":"uint256"}],"outputs":[]},
+  {"type":"function","name":"finalize","stateMutability":"nonpayable","inputs":[{"name":"id","type":"uint256"},{"name":"winners","type":"address[]"},{"name":"amounts","type":"uint96[]"},{"name":"v","type":"uint8"},{"name":"r","type":"bytes32"},{"name":"s","type":"bytes32"}],"outputs":[]},
+  {"type":"function","name":"cancel","stateMutability":"nonpayable","inputs":[{"name":"id","type":"uint256"}],"outputs":[]},
+  {"type":"function","name":"reclaimAbandoned","stateMutability":"nonpayable","inputs":[{"name":"id","type":"uint256"}],"outputs":[]},
+  {"type":"function","name":"addToAllowlist","stateMutability":"nonpayable","inputs":[{"name":"id","type":"uint256"},{"name":"who","type":"address[]"}],"outputs":[]},
+  {"type":"function","name":"playersOf","stateMutability":"view","inputs":[{"name":"id","type":"uint256"}],"outputs":[{"type":"address[]"}]},
+  {"type":"function","name":"tournaments","stateMutability":"view","inputs":[{"type":"uint256"}],"outputs":[{"name":"sponsor","type":"address"},{"name":"pot","type":"uint96"},{"name":"maxPlayers","type":"uint16"},{"name":"entryFee","type":"uint96"},{"name":"races","type":"uint8"},{"name":"closed","type":"bool"},{"name":"locked","type":"bool"},{"name":"settled","type":"bool"},{"name":"lockedAt","type":"uint64"}]},
+  {"type":"function","name":"nextId","stateMutability":"view","inputs":[],"outputs":[{"type":"uint256"}]},
+  {"type":"function","name":"resultSigner","stateMutability":"view","inputs":[],"outputs":[{"type":"address"}]},
+  {"type":"event","name":"RaceTournamentCreated","inputs":[{"name":"id","type":"uint256","indexed":true},{"name":"sponsor","type":"address"},{"name":"pot","type":"uint96"},{"name":"entryFee","type":"uint96"},{"name":"maxPlayers","type":"uint16"},{"name":"races","type":"uint8"},{"name":"closed","type":"bool"}]},
+  {"type":"event","name":"PlayerJoined","inputs":[{"name":"id","type":"uint256","indexed":true},{"name":"player","type":"address"},{"name":"playerCount","type":"uint256"}]},
+  {"type":"event","name":"Locked","inputs":[{"name":"id","type":"uint256","indexed":true},{"name":"playerCount","type":"uint256"}]},
+  {"type":"event","name":"Settled","inputs":[{"name":"id","type":"uint256","indexed":true},{"name":"winners","type":"uint256"},{"name":"total","type":"uint96"}]},
+  {"type":"event","name":"Payout","inputs":[{"name":"id","type":"uint256","indexed":true},{"name":"to","type":"address"},{"name":"amount","type":"uint96"}]}
+]

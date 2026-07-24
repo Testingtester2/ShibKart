@@ -1,0 +1,394 @@
+{
+  "_note": "Single source of truth for ALL ShibKart art. Generators compose: subject + style_anchor + quality[category], and use negative_base + negative[category]. Edit-pipeline assets ignore negatives (distilled cfg=1) \u2014 their lever is subject+silhouette+denoise. Logos use Qwen + ShibLogo LoRA (text2img) where negatives/steps/sampler apply.",
+  "style_anchor": "ShibKart house style: adorable chibi Shiba Inu kart-racing brand, bold clean vector-cartoon shading with thick dark-brown outlines, saturated warm palette anchored on shiba-orange #f8a13c, cyan #34e0ff, violet #7b4dff and cream #ffe9c9, soft bright studio lighting, glossy Nintendo Mario-Kart-8 production polish, cohesive on-brand",
+  "negative_base": "watermark, signature, ugly, blurry, low-res, lowres, jpeg artifacts, noise, muddy desaturated colors, photorealistic, gritty, grimy, harsh shadows, deformed, extra limbs, cluttered, messy, amateurish",
+  "quality": {
+    "logo": "crisp centered mascot emblem, sticker style, clean thick outline, transparent background, high detail, vector-clean",
+    "hero": "cinematic wide 16:9 establishing shot, dynamic sense of speed, depth and parallax, warm rim light, vibrant",
+    "icon": "single flat game icon, centered, bold readable silhouette, thick outline, transparent background",
+    "tile": "seamless tileable PBR albedo, flat orthographic top-down, even flat lighting, uniform, no perspective, no border",
+    "sponsor": "flat front-facing race billboard poster, bold graphic composition, filling the frame",
+    "livery": "flat kart decal sheet, bold graphic, transparent background",
+    "panel": "clean rounded game UI panel skin, glossy, subtle bevel"
+  },
+  "negative": {
+    "logo": "text, words, letters, typography, gibberish text, misspelled, cropped, off-center, background scenery",
+    "icon": "text, background, scenery, multiple objects, drop shadow",
+    "tile": "character, shiba, dog, kart, vehicle, mascot, person, scene, isometric, 3d perspective, horizon, sky, sign, logo, border, frame, vignette, watermark",
+    "sponsor": "3d perspective, angled view, dull, empty",
+    "livery": "background, kart, vehicle, scenery",
+    "panel": "text, busy, cluttered",
+    "hero": "text, ui, hud, watermark"
+  },
+  "logos": {
+    "model": "standard silhouette-edit pipeline (NO LoRA) \u2014 a mascot emblem, not a text wordmark",
+    "note": "Only ui/logo.png uses this. The menu shows a crisp CSS text wordmark if logo.png is absent, so logos are OPTIONAL.",
+    "items": [
+      {
+        "name": "logo",
+        "folder": "ui",
+        "size": [
+          768,
+          768
+        ],
+        "transparent": true,
+        "denoise": 0.72,
+        "shape": "badge",
+        "category": "logo",
+        "subject": "a ShibKart mascot emblem: a chibi shiba inu in a red racing helmet inside a bold rounded badge with crossed checkered flags, no text"
+      },
+      {
+        "name": "logo_bone",
+        "folder": "ui",
+        "size": [
+          768,
+          768
+        ],
+        "transparent": true,
+        "denoise": 0.72,
+        "shape": "badge",
+        "category": "logo",
+        "subject": "a ShibKart bone-edition mascot emblem: the chibi shiba with a glossy dog-bone badge motif, no text"
+      },
+      {
+        "name": "logo_treat",
+        "folder": "ui",
+        "size": [
+          768,
+          768
+        ],
+        "transparent": true,
+        "denoise": 0.72,
+        "shape": "badge",
+        "category": "logo",
+        "subject": "a ShibKart treat-edition mascot emblem: the chibi shiba with a golden dog-biscuit badge motif, no text"
+      }
+    ]
+  },
+  "menu": [
+    {
+      "name": "hero_bg",
+      "folder": "ui",
+      "size": [
+        1600,
+        900
+      ],
+      "transparent": false,
+      "denoise": 0.8,
+      "shape": "scene",
+      "category": "hero",
+      "subject": "a heroic ShibKart splash scene: three chibi shiba inu racers drifting their karts around a sunlit stylized circuit, sparks and speed lines, checkered banners, rolling hills and blue sky behind"
+    },
+    {
+      "name": "panel",
+      "folder": "ui",
+      "size": [
+        512,
+        512
+      ],
+      "transparent": true,
+      "denoise": 0.6,
+      "shape": "panel",
+      "category": "panel",
+      "subject": "a rounded glossy ShibKart menu panel skin, orange-to-violet gradient with a cream inner and a thin gold trim"
+    },
+    {
+      "name": "ic_play",
+      "folder": "ui",
+      "size": [
+        256,
+        256
+      ],
+      "transparent": true,
+      "denoise": 0.6,
+      "shape": "icon",
+      "category": "icon",
+      "subject": "a checkered racing-flag play icon"
+    },
+    {
+      "name": "ic_maps",
+      "folder": "ui",
+      "size": [
+        256,
+        256
+      ],
+      "transparent": true,
+      "denoise": 0.6,
+      "shape": "icon",
+      "category": "icon",
+      "subject": "a folded race-map icon with a glowing route line and a pin"
+    },
+    {
+      "name": "ic_garage",
+      "folder": "ui",
+      "size": [
+        256,
+        256
+      ],
+      "transparent": true,
+      "denoise": 0.6,
+      "shape": "icon",
+      "category": "icon",
+      "subject": "a kart tyre crossed with a wrench, garage icon"
+    },
+    {
+      "name": "ic_trophy",
+      "folder": "ui",
+      "size": [
+        256,
+        256
+      ],
+      "transparent": true,
+      "denoise": 0.6,
+      "shape": "icon",
+      "category": "icon",
+      "subject": "a shiny golden tournament trophy icon"
+    },
+    {
+      "name": "ic_gear",
+      "folder": "ui",
+      "size": [
+        256,
+        256
+      ],
+      "transparent": true,
+      "denoise": 0.6,
+      "shape": "icon",
+      "category": "icon",
+      "subject": "a settings gear icon"
+    }
+  ],
+  "tiles_road": {
+    "grass": "worn dark grey race asphalt with faint cracks and tyre scuffs",
+    "cherry": "clean light grey race asphalt with faint pink cherry petals scattered",
+    "city": "dark wet neon-city street asphalt with subtle painted lane fragments",
+    "desert": "sun-bleached cracked tan tarmac with light sand drift",
+    "moon": "glowing sci-fi hex-panel track surface with cyan seams",
+    "snow": "packed pale icy race road with compressed snow texture",
+    "volcano": "charred cracked black volcanic race road with faint ember glow in the cracks",
+    "beach": "warm wooden boardwalk race planks running lengthwise"
+  },
+  "tiles_ground": {
+    "grass": "lush green mown grass field",
+    "cherry": "soft green grass dusted with pink cherry blossom petals",
+    "city": "dark concrete plaza pavement with subtle grid joints",
+    "desert": "golden rippled desert sand",
+    "moon": "grey lunar regolith with tiny craters",
+    "snow": "fresh sparkling white snow",
+    "volcano": "dark cracked basalt rock with faint orange lava veins",
+    "beach": "golden sandy beach with tiny shells"
+  },
+  "misc_world": [
+    {
+      "name": "kerb",
+      "folder": "track",
+      "size": [
+        512,
+        128
+      ],
+      "transparent": false,
+      "tileable": true,
+      "denoise": 0.55,
+      "shape": "stripe",
+      "category": "tile",
+      "subject": "classic red and white diagonal race-track kerb stripes"
+    },
+    {
+      "name": "sponsor_1",
+      "folder": "track",
+      "size": [
+        512,
+        208
+      ],
+      "transparent": false,
+      "denoise": 0.72,
+      "shape": "sign",
+      "category": "sponsor",
+      "subject": "a ShibKart sponsor billboard: a bold shiba-orange board with a chibi shiba paw emblem and racing stripes"
+    },
+    {
+      "name": "sponsor_2",
+      "folder": "track",
+      "size": [
+        512,
+        208
+      ],
+      "transparent": false,
+      "denoise": 0.72,
+      "shape": "sign",
+      "category": "sponsor",
+      "subject": "a cyan energy-drink style race billboard with a lightning bolt and bold chevrons"
+    },
+    {
+      "name": "sponsor_3",
+      "folder": "track",
+      "size": [
+        512,
+        208
+      ],
+      "transparent": false,
+      "denoise": 0.72,
+      "shape": "sign",
+      "category": "sponsor",
+      "subject": "a violet tyre-brand race billboard with a glossy tyre and a golden bone emblem"
+    },
+    {
+      "name": "livery_flame",
+      "folder": "kart",
+      "size": [
+        512,
+        256
+      ],
+      "transparent": true,
+      "denoise": 0.6,
+      "shape": "decal",
+      "category": "livery",
+      "subject": "a hot-rod flame decal stripe in orange and yellow"
+    },
+    {
+      "name": "livery_stripe",
+      "folder": "kart",
+      "size": [
+        512,
+        256
+      ],
+      "transparent": true,
+      "denoise": 0.6,
+      "shape": "decal",
+      "category": "livery",
+      "subject": "a bold racing side-stripe decal with a number roundel"
+    },
+    {
+      "name": "livery_shib",
+      "folder": "kart",
+      "size": [
+        512,
+        256
+      ],
+      "transparent": true,
+      "denoise": 0.6,
+      "shape": "decal",
+      "category": "livery",
+      "subject": "a chibi shiba inu face decal emblem"
+    },
+    {
+      "name": "livery_check",
+      "folder": "kart",
+      "size": [
+        512,
+        256
+      ],
+      "transparent": true,
+      "denoise": 0.6,
+      "shape": "decal",
+      "category": "livery",
+      "subject": "a checkered racing decal band"
+    },
+    {
+      "name": "bone",
+      "folder": "items",
+      "size": [
+        256,
+        256
+      ],
+      "transparent": true,
+      "denoise": 0.6,
+      "shape": "icon",
+      "category": "icon",
+      "subject": "a glossy cartoon dog-bone power-up"
+    },
+    {
+      "name": "triple_bone",
+      "folder": "items",
+      "size": [
+        256,
+        256
+      ],
+      "transparent": true,
+      "denoise": 0.6,
+      "shape": "icon",
+      "category": "icon",
+      "subject": "three glossy cartoon dog-bones orbiting, power-up"
+    },
+    {
+      "name": "banana",
+      "folder": "items",
+      "size": [
+        256,
+        256
+      ],
+      "transparent": true,
+      "denoise": 0.6,
+      "shape": "icon",
+      "category": "icon",
+      "subject": "a glossy cartoon banana peel hazard"
+    },
+    {
+      "name": "oil",
+      "folder": "items",
+      "size": [
+        256,
+        256
+      ],
+      "transparent": true,
+      "denoise": 0.6,
+      "shape": "icon",
+      "category": "icon",
+      "subject": "a glossy black oil-slick puddle hazard"
+    },
+    {
+      "name": "shell",
+      "folder": "items",
+      "size": [
+        256,
+        256
+      ],
+      "transparent": true,
+      "denoise": 0.6,
+      "shape": "icon",
+      "category": "icon",
+      "subject": "a red spiky homing shell power-up"
+    },
+    {
+      "name": "shield",
+      "folder": "items",
+      "size": [
+        256,
+        256
+      ],
+      "transparent": true,
+      "denoise": 0.6,
+      "shape": "icon",
+      "category": "icon",
+      "subject": "a glowing cyan bubble shield power-up"
+    },
+    {
+      "name": "lightning",
+      "folder": "items",
+      "size": [
+        256,
+        256
+      ],
+      "transparent": true,
+      "denoise": 0.6,
+      "shape": "icon",
+      "category": "icon",
+      "subject": "a bright yellow lightning bolt power-up"
+    },
+    {
+      "name": "ghost",
+      "folder": "items",
+      "size": [
+        256,
+        256
+      ],
+      "transparent": true,
+      "denoise": 0.6,
+      "shape": "icon",
+      "category": "icon",
+      "subject": "a cute translucent ghost power-up"
+    }
+  ],
+  "tile_anchor": "flat top-down seamless repeating ground texture, hand-painted stylized cartoon surface, bright clean colours matching a colourful Shiba-themed kart racer, texture only \u2014 absolutely no characters, no dogs, no karts, no vehicles, no people, no logos, no signs, no horizon, fills the frame edge to edge",
+  "_tile_denoise": 0.85
+}

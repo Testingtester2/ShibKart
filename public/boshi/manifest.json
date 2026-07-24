@@ -1,0 +1,93 @@
+{
+ "fur": [
+  "Orange",
+  "Black",
+  "Brown"
+ ],
+ "eyes_tex": [
+  "Classic",
+  "Laser",
+  "Red",
+  "Spirals"
+ ],
+ "slots": {
+  "accessory": [
+   "dogtags",
+   "earrings",
+   "goldchain",
+   "leash"
+  ],
+  "clothes": [
+   "army",
+   "astro",
+   "bluearmor",
+   "businesssuit",
+   "clown",
+   "cowboy",
+   "dev",
+   "doctor",
+   "jersey",
+   "nofud",
+   "orangegi",
+   "overalls",
+   "peacetank",
+   "poncho",
+   "rockervest",
+   "ryoshi",
+   "sailor",
+   "scarf",
+   "steel",
+   "superhero",
+   "tuxshirt",
+   "wizardrobe"
+  ],
+  "eyes": [
+   "3dglasses",
+   "blackmask",
+   "cyborg",
+   "eyepatch",
+   "glasses",
+   "memeshades",
+   "monocle",
+   "visor",
+   "vr"
+  ],
+  "headwear": [
+   "army",
+   "beanie",
+   "bluehair",
+   "captainshat",
+   "clown",
+   "cowboy",
+   "crown",
+   "cyborg",
+   "devilhorns",
+   "halo",
+   "mohawk",
+   "partyhat",
+   "pirate",
+   "rasta",
+   "redhair",
+   "ryoshi",
+   "sombrero",
+   "sportband",
+   "steel",
+   "superhero",
+   "tophat",
+   "university",
+   "wizard"
+  ],
+  "mouth": [
+   "bone",
+   "bubblegum",
+   "clown",
+   "lollypop",
+   "mask",
+   "partypopper",
+   "pipe",
+   "pizza",
+   "sandwich",
+   "whistle"
+  ]
+ }
+}

@@ -1,0 +1,42 @@
+{
+  "_comment": "Maps THE SHIBOSHIS on-chain metadata (contract 0x11450058d796b02eb53e65374be59cff65d3fe7f, Ethereum) to the Shiba Eternity 3D kit. Rule: normalize value = lowercase, strip spaces + apostrophes. That resolves most trait values directly to a mesh/texture key. Overrides + routing below handle the exceptions.",
+  "contract": "0x11450058d796b02eb53e65374be59cff65d3fe7f",
+  "chain": "ethereum",
+  "trait_types": ["Fur", "Eyes", "Mouth", "Clothes", "Headwear", "Accessory", "Background"],
+
+  "Fur":       { "kind": "texture", "values": { "black": "Black", "brown": "Brown", "orange": "Orange" } },
+
+  "Clothes":   { "kind": "mesh", "dir": "clothes", "none": "none",
+    "_note": "normalize(value) -> clothes/<n>.obj (business suit->businesssuit, no fud->nofud, orange gi->orangegi, tux shirt->tuxshirt, blue armor->bluearmor, peace tank->peacetank, rocker vest->rockervest, wizard robe->wizardrobe)" },
+
+  "Headwear":  { "kind": "mesh", "dir": "headwear", "none": "none",
+    "overrides": { "captain's hat": "captainshat", "cowboy hat": "cowboyhat", "party hat": "partyhat", "top hat": "tophat", "devil horns": "devilhorns", "blonde hair": "blondehair", "blue hair": "bluehair", "wizard hat": "wizard" } },
+
+  "Accessory": { "kind": "mesh", "dir": "accessory", "none": "none",
+    "overrides": { "dog tags": "dogtags", "gold chain": "goldchain" } },
+
+  "Mouth":     { "kind": "mesh", "dir": "mouth", "none": "normal",
+    "overrides": { "party popper": "party_popper", "tongue out": "tongue_out" },
+    "_note": "mouth mesh names use underscores in our staged kit; adjust if renamed" },
+
+  "Eyes": {
+    "kind": "eyes-split",
+    "_note": "Eyes is one metadata slot but our kit splits it 3 ways.",
+    "mesh": {
+      "dir": "eyes",
+      "values": ["3d glasses","black mask","cyborg","glasses","laser visor","meme shades","monocle","pirate patch","vr"],
+      "overrides": { "3d glasses": "3dglasses", "black mask": "blackmask", "laser visor": "visor", "meme shades": "memeshades", "pirate patch": "eyepatch" }
+    },
+    "texture": {
+      "_note": "eye DIF texture on the base Eyes material",
+      "values": { "classic": "Classic", "laser eyes": "Laser", "red": "Red", "spirals": "Spirals" }
+    },
+    "expression": {
+      "_note": "animation/blendshape-driven; no mesh or texture. Use the matching *_CLP clip once animation is wired; fall back to Classic texture in static mode.",
+      "values": { "crosseyed": "CrossEyed_CLP", "look forward": "Idle_CLP", "look up": "LookUp_CLP", "wink": "Wink_CLP", "rocker makeup": "Classic" }
+    }
+  },
+
+  "Background": { "kind": "scene-2d",
+    "_note": "13 flat backdrops (beach, blue, space, pyramids, rainbow, ...). Not a 3D mesh — the game should render as a backdrop layer, ignored by the character compositor." }
+}
