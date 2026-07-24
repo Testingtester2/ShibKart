@@ -53,7 +53,6 @@ export function RaceView({ params, selfId, onFinish }: { params: RaceParams; sel
     const boxMeshes = engine.boxes.map((b) => { const m = new THREE.Mesh(new THREE.BoxGeometry(1.4, 1.4, 1.4), new THREE.MeshStandardMaterial({ color: 0x8ad0ff, emissive: 0x2288ff, emissiveIntensity: 0.4, transparent: true, opacity: 0.85 })); m.position.set(b.x, 1.1, b.z); scene.add(m); return m; });
     loadModel("item_box").then((model) => { if (!model) return; engine.boxes.forEach((b, i) => { scene.remove(boxMeshes[i]); const m = model.clone(true); fitToGround(m, 1.6); m.position.set(b.x, 1.1, b.z); scene.add(m); boxMeshes[i] = m as any; }); });
     buildScenery(scene, cl, track.width, track.theme);
-    buildStartArch(scene, cl, track.width);
     buildTown(scene, cl);
     const hazMesh = new Map<number, THREE.Object3D>(), shellMesh = new Map<number, THREE.Object3D>();
 

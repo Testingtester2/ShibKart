@@ -126,10 +126,12 @@ export async function loadBoshi(traits: BoshiTraits, opts: LoadBoshiOptions = {}
   let baseBody: THREE.SkinnedMesh | null = null;
   let bestSkin = -1;
   glb.scene.traverse((o: any) => {
-    if (o.isSkinnedMesh) {
-      const hasSkin = !!o.geometry?.getAttribute?.("skinIndex");
-      const n = o.geometry?.getAttribute?.("position")?.count ?? 0;
-      if (hasSkin && n > bestSkin) { bestSkin = n; baseBody = o; }
+    if (o.isSkinnedMesh || o.isMesh) {
+      if (o.isSkinnedMesh) {
+        const hasSkin = !!o.geometry?.getAttribute?.("skinIndex");
+        const n = o.geometry?.getAttribute?.("position")?.count ?? 0;
+        if (hasSkin && n > bestSkin) { bestSkin = n; baseBody = o; }
+      }
       const mats: THREE.Material[] = Array.isArray(o.material) ? o.material : [o.material];
       for (const m of mats as any[]) {
         const name = (m?.name || o.name || "").toLowerCase();
